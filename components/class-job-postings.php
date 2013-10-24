@@ -35,12 +35,12 @@ class Job_Postings
 	{
 		$page_title = "Cerate Job Postings";
 		$menu_title = "Job Postings";
-		$capability = "0";
+		$capability = "read";
 		$menu_slug = "view_page";
 
 		add_menu_page( $page_title, $menu_title, $capability, $menu_slug, null);
-		add_submenu_page( $menu_slug, 'View Job Posting', 'View Job Posting', '0', $menu_slug, array( $this, 'view_page' ) );
-		add_submenu_page( $menu_slug, 'Create Job Posting', 'Create Job Posting', '3', 'create-job-postings', array( $this, 'create_page' ) );
+		add_submenu_page( $menu_slug, 'View Job Posting', 'View Job Posting', 'read', $menu_slug, array( $this, 'view_page' ) );
+		add_submenu_page( $menu_slug, 'Create Job Posting', 'Create Job Posting', 'edit_pages', 'create-job-postings', array( $this, 'create_page' ) );
 	}//end admin_menu
 
 	/**
