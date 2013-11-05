@@ -15,8 +15,12 @@ License URI: http://www.gnu.org/licenses/gpl-2.0.html
 global $job_postings;
 
 require_once __DIR__ . '/components/class-job-postings.php';
+require_once __DIR__ . '/initialize/create_table.php';
+
+register_activation_hook( __FILE__, 'create_table' );
 
 if ( ! isset( $job_postings ) && ! $job_postings )
 {
 	$job_postings = new job_postings();
 }//end if
+
