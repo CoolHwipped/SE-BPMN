@@ -56,13 +56,26 @@ class Job_Postings
 		wp_register_style( 'job-postings-admin', plugins_url( 'css/job-postings.css', __FILE__ ), array(), $version );
 		wp_enqueue_style( 'job-postings-admin' );
 		*/
+		$title = $_POST['post_title'];
+		$category = $_POST['cat'];
+		$expiration_date = $_POST['time_length'];
+		$department = $_POST['dept'];
+		$job_description = $_POST['job_description'];
+		$job_title = $_POST['job_title'];
+		$pay_rate = $_POST['pay_rate'];
+		$email = $_POST['email'];
+		$app_link = $_POST['app_link'];
+		
+		jp::createPost($title,$category,$expiration_date,$department,$job_description,$job_title,$pay_rate,$email,$app_link);
 
+		echo '<p>'.jp::getNewPost().'</p>';
+		
 		if ( 'POST' == $_SERVER['REQUEST_METHOD'] )
 		{
-			include_once __DIR__ . '/templates/create_post.php';
+			include_once __DIR__ . '/templates/create-post.php';
 		}//end if
 		else{
-			include_once __DIR__ . '/templates/create_post.php';
+			include_once __DIR__ . '/templates/create-post.php';
 		}
 	}//end create_page
 
