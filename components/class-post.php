@@ -1,15 +1,5 @@
 <?php
 class Post{
-	/*
-	 *	The parameters takes in an array containing
-	 *	title, category, date_expire, department, contact_id, description_id
-	 *	
-	 *	if contact_id and description_id are null meaning you don't have one yet
-	 *	create a contact object or grab the correct contact id and add it in.
-	 *
-   *	description id is gotten after you create a description object and save it.
-	 *
-	 */
 	public function __construct($attributes){
 		//the attributes are an associative array so if you want the
 		//job title it is the same as the name of the attribute in the database
