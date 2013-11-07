@@ -1,3 +1,2 @@
-SE-BPMN
-I am personally a fan of chocolate... just saying.
+This wordpress plugin is made to display job postings
 =======

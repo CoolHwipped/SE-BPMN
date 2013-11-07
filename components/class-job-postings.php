@@ -17,6 +17,22 @@ class Job_Postings
 	public function admin_enqueue_scripts()
 	{
 		$version = 1;
+// <!-- Latest compiled and minified CSS -->
+// <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
+
+		// adding twitter bootstrap
+
+		wp_register_style( 'bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css' );
+		wp_enqueue_style( 'bootstrap' );
+
+		wp_register_style( 'bootstrap-theme', '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css' );
+		wp_enqueue_style( 'bootstrap-theme' );
+
+		wp_register_script( 'bootstrap-js', '//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js' );
+		wp_enqueue_script( 'bootstrap-js' );
+		
+		// end adding bootstrap
+
 		wp_register_style( 'job-postings-admin', plugins_url( 'css/job-postings.css', __FILE__ ), array(), $version );
 		wp_enqueue_style( 'job-postings-admin' );
 
@@ -56,27 +72,46 @@ class Job_Postings
 		wp_register_style( 'job-postings-admin', plugins_url( 'css/job-postings.css', __FILE__ ), array(), $version );
 		wp_enqueue_style( 'job-postings-admin' );
 		*/
-		$title = $_POST['post_title'];
-		$category = $_POST['cat'];
-		$expiration_date = $_POST['time_length'];
-		$department = $_POST['dept'];
-		$job_description = $_POST['job_description'];
-		$job_title = $_POST['job_title'];
-		$pay_rate = $_POST['pay_rate'];
-		$email = $_POST['email'];
-		$app_link = $_POST['app_link'];
-		
-		jp::createPost($title,$category,$expiration_date,$department,$job_description,$job_title,$pay_rate,$email,$app_link);
+		$message = null;
 
-		echo '<p>'.jp::getNewPost().'</p>';
-		
+		// echo '<p>'.jp::getNewPost().'</p>';
 		if ( 'POST' == $_SERVER['REQUEST_METHOD'] )
 		{
-			include_once __DIR__ . '/templates/create-post.php';
+			$contact_args = new stdClass();
+			
+			$contact_args->name = $_POST['name'];
+			$contact_args->email = $_POST['email'];
+			$contact_args->phone = $_POST['phone'];
+			$contact_args->job_desc = $_POST['job_desc'];
+
+			if (!$contact_id = jp::contactExists($contact_args))
+			{
+				$contact = new contact($contact_args);
+				$contact_id = $contact->save();
+			}
+
+			$post_args = new stdClass();
+
+			$post_args->application_link = $_POST['app_link'];
+			$post_args->category = $_POST['cat'];
+			$post_args->contact_id = $contact_id;
+			$post_args->date_expire = date('Y-m-d', strtotime("+". $_POST['time_length'] . " days"));
+			$post_args->department = $_POST['dept'];
+			$post_args->description = $_POST['job_description'];
+			$post_args->job_title = $_POST['job_title'];
+			$post_args->pay_rate = $_POST['pay_rate'];
+			$post_args->title = $_POST['post_title'];
+
+			$post = new post($post_args);
+			$post->save();
+
+			$message = "Post was successfully submitted";
+
 		}//end if
-		else{
-			include_once __DIR__ . '/templates/create-post.php';
-		}
+
+		// display the template
+		include_once __DIR__ . '/templates/create_post.php';
+
 	}//end create_page
 
 	/**
@@ -94,13 +129,14 @@ class Job_Postings
 		wp_enqueue_style( 'job-postings-admin' );
 		 */
 
+		$posts = new posts();
+
 		if ( 'POST' == $_SERVER['REQUEST_METHOD'] )
 		{
-			include_once __DIR__ . '/templates/view_post.php';
+			// not sure what we are doing here yet, maybe sorting.
 		}//end if
-		else{
-			include_once __DIR__ . '/templates/view_post.php';
-		}
+
+		include_once __DIR__ . '/templates/view_post.php';
 	}//end create_page
 
 }//end class
