@@ -7,8 +7,10 @@ class Job_Postings
 	 */
 	public function __construct()
 	{
-		add_action( 'admin_menu', array( $this, 'admin_menu' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		add_action( 'init', array( $this, 'create_post_type'  ));
+		add_action('init', array( $this, 'taxonomies_job_posting' ), 0);
+	// 	add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+	// 	add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}//end __construct
 
 	/**
@@ -43,6 +45,56 @@ class Job_Postings
 		wp_enqueue_script( 'job-postings-behavior' );
 
 	}//end admin_enqueue_scripts
+
+	public function create_post_type()
+	{
+// http://codex.wordpress.org/Post_Types
+		$labels = array(
+			'name'               => _x( 'Job Postings', 'post type general name' ),
+			'singular_name'      => _x( 'Job Posting', 'post type singular name' ),
+			'add_new'            => _x( 'Add New', 'Job Posting' ),
+			'add_new_item'       => __( 'Add New Job Posting' ),
+			'edit_item'          => __( 'Edit Job Posting' ),
+			'new_item'           => __( 'New Job Posting' ),
+			'all_items'          => __( 'All Job Postings' ),
+			'view_item'          => __( 'View Job Posting' ),
+			'search_items'       => __( 'Search Job Postings' ),
+			'not_found'          => __( 'No Job Postings found' ),
+			'not_found_in_trash' => __( 'No Job Postings found in the Trash' ), 
+			'parent_item_colon'  => '',
+			'menu_name'          => 'Job Postings'
+		);
+		$args = array(
+			'labels'        => $labels,
+			'description'   => 'Holds our Job Postings and Job Posting specific data',
+			'public'        => true,
+			'menu_position' => null,
+			'supports'      => array( 'title', 'editor', 'thumbnail', 'excerpt', 'comments' ),
+			'has_archive'   => true,
+		);
+		register_post_type( 'job_posting', $args );
+	}
+
+	public function taxonomies_job_posting(){
+		$labels = array(
+			'name'              => _x( 'Job Posting Categories', 'taxonomy general name' ),
+			'singular_name'     => _x( 'Job Posting Category', 'taxonomy singular name' ),
+			'search_items'      => __( 'Search Job Posting Categories' ),
+			'all_items'         => __( 'All Job Posting Categories' ),
+			'parent_item'       => __( 'Parent Job Posting Category' ),
+			'parent_item_colon' => __( 'Parent Job Posting Category:' ),
+			'edit_item'         => __( 'Edit Job Posting Category' ), 
+			'update_item'       => __( 'Update Job Posting Category' ),
+			'add_new_item'      => __( 'Add New Job Posting Category' ),
+			'new_item_name'     => __( 'New Job Posting Category' ),
+			'menu_name'         => __( 'Job Posting Categories' ),
+		);
+		$args = array(
+			'labels' => $labels,
+			'hierarchical' => true,
+		);
+		register_taxonomy( 'job_posting_category', 'job_posting', $args );
+	}
 
 	/**
 	 * register menus
