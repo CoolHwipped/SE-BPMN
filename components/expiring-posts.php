@@ -1,6 +1,6 @@
 <?php
 
-class expiring-posts
+class expiring_posts
 {
 	function __construct($time = 5)
 	{
