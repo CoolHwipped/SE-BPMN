@@ -9,9 +9,17 @@ class Job_Postings
 	{
 		add_action( 'init', array( $this, 'create_post_type'  ));
 		add_action('init', array( $this, 'taxonomies_job_posting' ), 0);
-	// 	add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		//add settings menu item
+		add_action('admin_menu',array($this, 'job_posting_settings'));
+		
+  // 	add_action( 'admin_menu', array( $this, 'admin_menu' ) );
 	// 	add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}//end __construct
+	
+	public function job_posting_settings(){
+		add_submenu_page('edit.php?post_type=job_posting', 'settings', 'Settings', 'edit_posts', basename(__FILE__), array($this,'job_postings_settings_page'));
+		add_action('admin_init', array($this,'job_posting_settings_store'));
+	}
 
 	/**
 	 * enqueue scripts and styles
@@ -45,7 +53,24 @@ class Job_Postings
 		wp_enqueue_script( 'job-postings-behavior' );
 
 	}//end admin_enqueue_scripts
+	
+	//settings callback
+	public function job_postings_settings_page(){
+		echo '<div class="wrap"><div id="icon-tools" class="icon32"></div>';
+		echo '<h2>My Job Posting Settings</h2>';
+		echo '</div>';
+		//add to page
+		if ( 'POST' == $_SERVER['REQUEST_METHOD'] )
+		{
+			// not sure what we are doing here yet, maybe sorting.
+		}//end if
 
+		include_once __DIR__ . '/templates/posting_settings.php';
+	}
+	function job_posting_settings_store() {
+		register_setting('job_posting_settings', 'job_posting_job_posting_length');
+		register_setting('job_posting_settings', 'job_posting_category_list');
+	}
 	public function create_post_type()
 	{
 // http://codex.wordpress.org/Post_Types
@@ -74,7 +99,6 @@ class Job_Postings
 		);
 		register_post_type( 'job_posting', $args );
 	}
-
 	public function taxonomies_job_posting(){
 		$labels = array(
 			'name'              => _x( 'Job Posting Categories', 'taxonomy general name' ),
@@ -95,7 +119,6 @@ class Job_Postings
 		);
 		register_taxonomy( 'job_posting_category', 'job_posting', $args );
 	}
-
 	/**
 	 * register menus
 	 */
@@ -107,7 +130,7 @@ class Job_Postings
 		$menu_slug = "view_page";
 
 		add_menu_page( $page_title, $menu_title, $capability, $menu_slug, null);
-		add_submenu_page( $menu_slug, 'View Job Posting', 'View Job Posting', 'read', $menu_slug, array( $this, 'view_page' ) );
+		add_submenu_page( $menu_slug, 'View Job Posting', 'View Job Posting', 'read', $menu_slug, posting_settings );
 		add_submenu_page( $menu_slug, 'Create Job Posting', 'Create Job Posting', 'edit_pages', 'create-job-postings', array( $this, 'create_page' ) );
 	}//end admin_menu
 
