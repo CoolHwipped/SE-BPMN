@@ -20,6 +20,12 @@ require_once __DIR__ . '/components/class-post.php';
 require_once __DIR__ . '/components/class-posts.php';
 require_once __DIR__ . '/components/class-job-postings.php';
 
+// delete_option('job_postings_exp_reminder');
+add_option('job_postings_max_length',150,'','no');
+add_option('job_postings_def_length',30,'','no');
+add_option('job_postings_exp_reminder',5,'','no');
+
+
 if ( ! isset( $job_postings ) && ! $job_postings )
 {
 	$job_postings = new job_postings();

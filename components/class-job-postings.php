@@ -22,25 +22,7 @@ class Job_Postings
 	{
 		global $typenow;
 		$version = 1;
-// <!-- Latest compiled and minified CSS -->
-// <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 
-		// adding twitter bootstrap
-
-		// wp_register_style( 'bootstrap', '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css' );
-		// wp_enqueue_style( 'bootstrap' );
-
-		// wp_register_style( 'bootstrap-theme', '//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap-theme.min.css' );
-		// wp_enqueue_style( 'bootstrap-theme' );
-
-		// wp_register_script( 'bootstrap-js', '//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js' );
-		// wp_enqueue_script( 'bootstrap-js' );
-		
-		// end adding bootstrap
-
-
-//		wp_register_style( 'job-postings-jquery-ui', 'https://code.jquery.com/ui/1.10.3/jquery-ui.js' );
-//		wp_enqueue_style( 'job-postings-jquery-ui' );
 		wp_enqueue_script( 'jquery' );
     wp_enqueue_script( 'jquery-ui-core' );
     wp_enqueue_script( 'jquery-datepicker', '//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js', array('jquery', 'jquery-ui-core' ) );
@@ -164,7 +146,13 @@ class Job_Postings
 	{
 		wp_nonce_field( basename( __FILE__ ), 'job_postings_datepicker_box_nonce' );
 		$value = esc_attr( get_post_meta( $object->ID, 'job_postings_datepicker', true ) );;
-		
+
+		$date = date("m/d/Y", strtotime("+" . get_option('job_postings_def_length') . "days"));
+
+		$max_date = date("m/d/Y", strtotime("+" . get_option('job_postings_max_length') . "days"));
+
+		echo '<input id="max-date" value="' . $max_date . '" type="hidden">'; 
+		echo '<input id="max-duration" value="' . get_option('job_postings_max_length') . '" type="hidden">'; 
 		echo '<div name="job-postings-datepicker-jquery" id="job-postings-datepicker-jquery"></div>';
 		if ($value)
 		{
@@ -172,7 +160,7 @@ class Job_Postings
 		}
 		else
 		{
-			echo "<input name='job-postings-datepicker' id='job-postings-datepicker' type='hidden' />";
+			echo "<input name='job-postings-datepicker' id='job-postings-datepicker' type='hidden' value='$date' />";
 		}
 	}
 
@@ -202,6 +190,11 @@ class Job_Postings
 		if ($value)
 		{
 			echo "value='$value' ";
+		}
+		else
+		{
+
+			echo "value='" . get_option('job_postings_exp_reminder') . "'";
 		}
 		echo 'style="width: 13em"/>';
 	}
@@ -339,6 +332,7 @@ class Job_Postings
 		add_submenu_page( $menu_slug, 'View Job Posting', 'View Job Posting', 'read', $menu_slug, array( $this, 'view_page' ) );
 	  add_submenu_page( $menu_slug, 'Create Job Posting', 'Create Job Posting', 'edit_pages', 'post-new.php?post_type=job_posting', "" );
 	  add_submenu_page( $menu_slug, 'Edit Job Posting', 'Edit Job Posting', 'edit_pages', 'edit.php?post_type=job_posting', "" );
+	  add_submenu_page( $menu_slug, 'Settings', 'Settings', 'edit_pages', 'settings', array( $this, 'settings_page') );
 	}//end admin_menu
 
 	/**
@@ -346,7 +340,7 @@ class Job_Postings
 	 */
 	public function view_page()
 	{
-
+		
 		// register javascript and css
 		wp_register_script( 'job-postings', plugins_url( 'js/view-page.js', __FILE__ ), array(), $version, TRUE );
 		wp_enqueue_script( 'job-postings' );
@@ -358,9 +352,28 @@ class Job_Postings
 		if ( 'POST' == $_SERVER['REQUEST_METHOD'] )
 		{
 			// not sure what we are doing here yet, maybe sorting.
+			$sortable = $_POST['sortable'];
 		}//end if
 
 		include_once __DIR__ . '/templates/view_post.php';
 	}//end create_page
+
+	public function settings_page()
+	{	
+		if ( 'POST' == $_SERVER['REQUEST_METHOD'] )
+		{
+			// not sure what we are doing here yet, maybe sorting.
+			update_option('job_postings_max_length', $_POST['max_length']);
+			update_option('job_postings_def_length', $_POST['default_length']);
+			update_option('job_postings_exp_reminder', $_POST['expiration_reminder']);
+
+		}//end if
+
+		$max_length = get_option('job_postings_max_length');
+		$default_length = get_option('job_postings_def_length');
+		$expiration = get_option('job_postings_exp_reminder');
+
+		include_once __DIR__ . '/templates/settings.php';
+	}
 
 }//end class

@@ -1,3 +1,14 @@
+<form id="sorting_options" method="POST" action="admin.php?page=view_page">
+	<div>
+		<label for="sortable">Sort by: </label>
+		<select name="sortable" id="sortable">
+			<?php if($sortable==''){echo 'selected="selected"'; } ?>
+			<option <?php if($sortable=='department'){echo 'selected="selected"'; } ?> value="department">Department</option>
+			<option <?php if($sortable=='payrate'){echo 'selected="selected"'; } ?> value="payrate">Pay Rate</option>
+			<option <?php if($sortable=='date_posted'){echo 'selected="selected"'; } ?> value="date_posted">Date Posted</option>
+		</select>
+	</div>
+</form>
 <?php foreach ($posts as $post){ ?>
 	<div class='jumbotron'>
 		<h2><?php echo $post->title ?></h2>
