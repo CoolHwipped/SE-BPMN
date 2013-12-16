@@ -16,6 +16,8 @@ global $job_postings;
 
 require_once __DIR__ . '/components/jp.php';
 require_once __DIR__ . '/components/expiring-posts.php';
+require_once __DIR__ . '/components/class-post.php';
+require_once __DIR__ . '/components/class-posts.php';
 require_once __DIR__ . '/components/class-job-postings.php';
 
 if ( ! isset( $job_postings ) && ! $job_postings )
