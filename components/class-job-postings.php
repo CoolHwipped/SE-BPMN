@@ -353,6 +353,9 @@ class Job_Postings
 		{
 			// not sure what we are doing here yet, maybe sorting.
 			$sortable = $_POST['sortable'];
+			$order = $_POST['order'];
+
+			$posts->bubble_sort($sortable, $order);
 		}//end if
 
 		include_once __DIR__ . '/templates/view_post.php';

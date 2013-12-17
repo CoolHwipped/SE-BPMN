@@ -21,6 +21,83 @@ class posts
 			$this->$x = new post($post);
 			$x++;
 		}
+		$this->size = $x-1;
 	}
+	 
+	public function bubble_sort($topic, $order)
+	{
+		$count = $this->size;
+		for ($i = 0; $i < $count; $i++)
+		{
+			for ($ii = 0; $ii < $count; $ii++)
+			{
+				$plus_1 = $ii + 1;
+				if ($topic == 'department')
+				{
+					if ($order == 'asc')
+					{
+						if ( strcmp(strtolower($this->$ii->department), strtolower($this->$plus_1->department)) < 0 )
+						{
+							$temp = $this->$plus_1;
+							$this->$plus_1 = $this->$ii;
+							$this->$ii = $temp;
+						}
+					}
+					else
+					{
+						if ( strcmp(strtolower($this->$ii->department), strtolower($this->$plus_1->department)) > 0 )
+						{
+							$temp = $this->$plus_1;
+							$this->$plus_1 = $this->$ii;
+							$this->$ii = $temp;
+						}
+					}
+				}
+				else if ($topic == 'payrate')
+				{
+					if ($order == 'asc')
+					{
+						if($this->$plus_1->payrate < $this->$ii->payrate){
+							$temp = $this->$plus_1;
+							$this->$plus_1 = $this->$ii;
+							$this->$ii = $temp;							
+						}	
+					}
+					else
+					{
+						if($this->$plus_1->payrate > $this->$ii->payrate){
+							$temp = $this->$plus_1;
+							$this->$plus_1 = $this->$ii;
+							$this->$ii = $temp;							
+						}	
+					}
+				}
+				else if ($topic == 'date_posted')
+				{
+					$this_one = strtotime($this->$ii->start_date);
+					$next_one = strtotime($this->$plus_1->start_date);
+					if ($order == 'asc')
+					{
+						if($this_one < $next_one)
+						{
+							$temp = $this->$plus_1;
+							$this->$plus_1 = $this->$ii;
+							$this->$ii = $temp;
+						}
+					}
+					else
+					{
+						if($this_one > $next_one)
+						{
+							$temp = $this->$plus_1;
+							$this->$plus_1 = $this->$ii;
+							$this->$ii = $temp;
+						}
+					}
+
+				}
+			}
+		}
+	}	 
 
 }

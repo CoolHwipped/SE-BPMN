@@ -6,7 +6,7 @@ class post
 	{
 		$this->id = $wp_post->ID;
 		$this->title = $wp_post->post_title;
-		$this->post_date = $wp_post->post_date;
+		$this->start_date = date("m/d/Y", strtotime($wp_post->post_date));
 		$this->post_title = $wp_post->post_title;
 		$this->content = $wp_post->post_content;
 		$this->payrate = $wp_post->payrate;
