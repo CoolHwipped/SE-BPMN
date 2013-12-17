@@ -13,6 +13,7 @@ class Job_Postings
 		add_action( 'load-post-new.php', array( $this, 'post_meta_boxes_setup') );
 	 	add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	 	add_action( 'admin_menu', array( $this, 'admin_menu' ) );
+		$expiring_posts = new expiring_posts();
 	}//end __construct
 
 	/**
@@ -44,11 +45,11 @@ class Job_Postings
 	public function add_post_meta_boxes()
 	{
 		// add all custom meta boxes here
-		$id = 'job-postings-datepickeri-1';
+		$id = 'job-postings-datepicker-1';
 		$title = "End date";
 		$callback = array( $this, "job_postings_create_datepicker");
 		$page = "job_posting";
-		$context = 'side';
+		$context = 'normal';
 		add_meta_box( $id, $title, $callback, $page, $context, $priority = 'default', $callback_args = null );
 
 		$id = 'job-postings-payrate-1';

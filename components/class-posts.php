@@ -10,10 +10,10 @@ class posts
 		foreach ($loop->posts as $post)
 		{
 			$meta_values = get_post_meta( $post->ID );
-
 			$post->payrate = $meta_values['job_postings_payrate'][0];	
 			$post->end_date = $meta_values['job_postings_datepicker'][0];	
 			$post->department = $meta_values['job_postings_department'][0];	
+			$post->expiration_reminder = $meta_values['job_postings_expiration'][0];	
 			$post->contact_name = $meta_values['job_postings_contact_name'][0];	
 			$post->contact_email = $meta_values['job_postings_contact_email'][0];	
 			$post->contact_phone = $meta_values['job_postings_contact_phone'][0];	

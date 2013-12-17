@@ -21,7 +21,7 @@
 			<span class='hide-content' style='display: none;'>
 				<p>Description: <?php echo $post->content; ?></p>
 				<p>Department: <?php echo $post->department; ?></p>
-				<p>Pay rate: <?php echo $post->payrate; ?></p>
+				<p>Pay rate: $<?php echo $post->payrate; ?>/hr</p>
 				<p>Date Posted: <?php echo $post->start_date; ?></p>
 				<p><h4>Contact details</h4>
 				<div>Name: <?php echo $post->contact_name ?></div> 

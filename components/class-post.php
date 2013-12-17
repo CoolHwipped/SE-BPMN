@@ -15,6 +15,7 @@ class post
 		$this->contact_phone = $wp_post->contact_phone;
 		$this->contact_email = $wp_post->contact_email;
 		$this->contact_name = $wp_post->contact_name;
+		$this->expiration_reminder = $wp_post->expiration_reminder;	
 	}
 
 }
